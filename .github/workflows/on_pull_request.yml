@@ -38,10 +38,10 @@ jobs:
 
       - name: "Build Native image"
         run: |
-          mkdir lambda \
-          docker build -t native-lambda:1 . \
-          id=$(docker create --name tmp native-lambda:1) \
-          docker cp $id:/app/lambda.zip ./lambda/lambda.zip \
+          mkdir lambda
+          docker build -t native-lambda:1 .
+          id=$(docker create --name tmp native-lambda:1)
+          docker cp $id:/app/lambda.zip ./lambda/lambda.zip
           docker rm tmp
 
       - uses: actions/upload-artifact@v3
