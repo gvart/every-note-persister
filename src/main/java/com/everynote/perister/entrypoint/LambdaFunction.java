@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.function.Consumer;
 
 @Component
-public class LambdaFunction implements Consumer<String> {
+public class LambdaFunction implements Consumer<SQSEvent> {
 
     private static final Logger log = LoggerFactory.getLogger(LambdaFunction.class);
     private final ProcessNoteRequest processNoteRequest;
@@ -20,9 +20,12 @@ public class LambdaFunction implements Consumer<String> {
     }
 
     @Override
-    public void accept(String sqsEvent) {
+    public void accept(SQSEvent sqsEvent) {
         try {
-            System.out.println(sqsEvent);
+            sqsEvent.getRecords()
+                    .stream()
+                    .map(SQSEvent.SQSMessage::getBody)
+                    .forEach(processNoteRequest::process);
         } catch (Exception exception) {
             log.error("Failed to process records", exception);
         }
