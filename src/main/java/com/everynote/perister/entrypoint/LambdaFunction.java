@@ -22,6 +22,7 @@ public class LambdaFunction implements Consumer<SQSEvent> {
     @Override
     public void accept(SQSEvent sqsEvent) {
         try {
+            log.info("{}", sqsEvent);
             sqsEvent.getRecords()
                     .stream()
                     .map(SQSEvent.SQSMessage::getBody)

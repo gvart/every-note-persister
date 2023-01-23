@@ -10,7 +10,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 public class JacksonConfig {
 
     @Bean
-    public ObjectMapper mapper() {
+    public ObjectMapper jacksonObjectMapper() {
         return Jackson2ObjectMapperBuilder.json()
                 .featuresToEnable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
                 .build();
