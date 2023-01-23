@@ -21,7 +21,7 @@ val springCloudVersion: String  by project
 
 dependencies {
     implementation(platform("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"))
-
+    implementation("com.amazonaws:aws-lambda-java-serialization:1.0.1")
     implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
     implementation("org.springframework.cloud:spring-cloud-starter-function-web")
     implementation("org.springframework.cloud:spring-cloud-function-adapter-aws")
