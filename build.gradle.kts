@@ -25,6 +25,7 @@ dependencies {
     implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
     implementation("com.amazonaws:aws-lambda-java-core:1.2.2")
     implementation("org.springframework.cloud:spring-cloud-starter-function-web")
+    implementation("org.springframework.cloud:spring-cloud-function-context")
     implementation("org.springframework.cloud:spring-cloud-function-adapter-aws")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -43,7 +44,7 @@ graalvmNative {
 }
 
 tasks.withType<ShadowJar> {
-    archiveClassifier.set("aws")
+    archiveClassifier.set("")
     dependencies {
         exclude("org.springframework.cloud:spring-cloud-function-web:$springCloudVersion")
     }
@@ -57,8 +58,13 @@ tasks.withType<ShadowJar> {
         mergeStrategy = "append"
     }
 }
+
+tasks.withType<Jar>() {
+    archiveClassifier.set("default")
+}
+
 tasks {
-    build {
+    generateResourcesConfigFile {
         dependsOn(shadowJar)
     }
 }
