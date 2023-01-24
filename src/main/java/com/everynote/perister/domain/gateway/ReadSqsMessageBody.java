@@ -1,5 +1,7 @@
 package com.everynote.perister.domain.gateway;
 
+import com.everynote.perister.domain.model.PersistNoteRequest;
+
 public interface ReadSqsMessageBody {
-    <T> T read(String body);
+    PersistNoteRequest read(String body);
 }

@@ -15,7 +15,7 @@ public class ProcessNoteRequest {
     }
 
     public void process(String messageBody) {
-        var result = readSqsMessageBody.<PersistNoteRequest>read(messageBody);
+        var result = readSqsMessageBody.read(messageBody);
         saveNoteRequest.save(result);
     }
 }
