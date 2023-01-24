@@ -2,3 +2,5 @@ spring:
   jackson:
     mapper:
       accept-case-insensitive-properties: true
+    deserialization:
+      fail-on-unknown-properties: false
