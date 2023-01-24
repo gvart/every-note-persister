@@ -1,1 +1,4 @@
-
+spring:
+  jackson:
+    mapper:
+      accept-case-insensitive-properties: true
