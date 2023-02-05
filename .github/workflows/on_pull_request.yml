@@ -42,10 +42,11 @@ jobs:
 
       - name: "build image if missing"
         run: |
-          if [ "$(docker images -q al2-graalvm:gradle 2> /dev/null)" == "" ]; then
+          if [[ "$(docker images -q al2-graalvm:gradle 2> /dev/null)" == "" ]]; then
             echo "Image not found. Building image."
             ./build-image.sh
           else
             echo "Image found. Skipping build."
+          fi
 
       - run: sam build --use-container
