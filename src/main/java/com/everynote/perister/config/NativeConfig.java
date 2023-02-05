@@ -1,7 +1,8 @@
 package com.everynote.perister.config;
 
-import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.everynote.perister.domain.model.PersistNoteRequest;
+import com.everynote.perister.entrypoint.model.SqsEvent;
+import com.everynote.perister.entrypoint.model.SqsMessage;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,8 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RegisterReflectionForBinding({
         PersistNoteRequest.class,
-        SQSEvent.class,
-        SQSEvent.SQSMessage.class,
-        SQSEvent.MessageAttribute.class})
+        SqsEvent.class,
+        SqsMessage.class})
 public class NativeConfig {
 }
