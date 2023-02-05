@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RegisterReflectionForBinding({
         PersistNoteRequest.class,
-        SQSEvent.class, SQSEvent.SQSMessage.class, SQSEvent.MessageAttribute.class})
+        SQSEvent.class,
+        SQSEvent.SQSMessage.class,
+        SQSEvent.MessageAttribute.class})
 public class NativeConfig {
 }
