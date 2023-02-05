@@ -1,14 +1,42 @@
-FROM ghcr.io/graalvm/native-image:ol7-java17-22.3.0 as build
+FROM public.ecr.aws/amazonlinux/amazonlinux:2
 
-RUN yum install -y zip
+RUN yum -y update \
+    && yum install -y unzip tar gzip bzip2-devel ed gcc gcc-c++ gcc-gfortran \
+    less libcurl-devel openssl openssl-devel readline-devel xz-devel \
+    zlib-devel glibc-static libcxx libcxx-devel llvm-toolset-7 zlib-static \
+    && rm -rf /var/cache/yum
 
-WORKDIR /app
-COPY ./ ./
-RUN ./gradlew nativeCompile
-RUN chmod a+x ./build/native/nativeCompile/application
-RUN zip lambda.zip -j ./native/bootstrap ./build/native/nativeCompile/application
+# Graal VM
+ARG JAVA_VERSION
+ARG GRAAL_VERSION
+ENV GRAAL_FOLDERNAME graalvm-ce-${JAVA_VERSION}-${GRAAL_VERSION}
+ENV GRAAL_FILENAME graalvm-ce-${JAVA_VERSION}-linux-amd64-${GRAAL_VERSION}.tar.gz
+RUN curl -4 -L https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAAL_VERSION}/${GRAAL_FILENAME} | tar -xvz
+RUN mv $GRAAL_FOLDERNAME /usr/lib/graalvm
+RUN rm -rf $GRAAL_FOLDERNAME
 
-#To keep image small on local machine
-FROM alpine:latest
-WORKDIR /app
-COPY --from=build /app/lambda.zip ./
+# Gradle
+ARG GRADLE_VERSION
+ENV GRADLE_FOLDERNAME gradle-${GRADLE_VERSION}
+ENV GRALE_FILENAME ${GRADLE_FOLDERNAME}-bin.zip
+RUN curl -L https://services.gradle.org/distributions/${GRALE_FILENAME} > $GRALE_FILENAME
+RUN unzip -o $GRALE_FILENAME
+RUN mv $GRADLE_FOLDERNAME /usr/lib/gradle
+RUN rm $GRALE_FILENAME
+ENV PATH=$PATH:/usr/lib/gradle/bin
+
+# AWS Lambda Builders
+RUN amazon-linux-extras enable python3.8
+RUN yum clean metadata && yum -y install python3.8
+RUN curl -L get-pip.io | python3.8
+RUN pip3 install aws-lambda-builders
+
+VOLUME /project
+WORKDIR /project
+
+RUN /usr/lib/graalvm/bin/gu install native-image
+RUN ln -s /usr/lib/graalvm/bin/native-image /usr/bin/native-image
+
+ENV JAVA_HOME /usr/lib/graalvm
+
+ENTRYPOINT ["sh"]
