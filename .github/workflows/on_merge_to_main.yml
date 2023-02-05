@@ -20,18 +20,13 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: "Check if build image exists"
-        id: check_image
+      - name: "build image if missing"
         run: |
           if [ "$(docker images -q al2-graalvm:gradle 2> /dev/null)" == "" ]; then
             echo "Image not found. Building image."
-            exit 1
+            ./build-image.sh
           else
             echo "Image found. Skipping build."
-            exit 0
-      - name: Build the Docker Image
-        if: steps.check_image.outputs.exit_code == '1'
-        run: ./build-image.sh
 
       # Build inside Docker containers
       - run: sam build --use-container

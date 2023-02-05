@@ -40,17 +40,12 @@ jobs:
           python-version: "3.8"
       - uses: aws-actions/setup-sam@v2
 
-      - name: "Check if build image exists"
-        id: check_image
+      - name: "build image if missing"
         run: |
           if [ "$(docker images -q al2-graalvm:gradle 2> /dev/null)" == "" ]; then
             echo "Image not found. Building image."
-            exit 1
+            ./build-image.sh
           else
             echo "Image found. Skipping build."
-            exit 0
-      - name: Build the Docker Image
-        if: steps.check_image.outputs.exit_code == '1'
-        run: ./build-image.sh
 
       - run: sam build --use-container
