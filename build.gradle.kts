@@ -1,12 +1,10 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
 
 plugins {
     java
     id("org.springframework.boot") version "3.0.2"
     id("io.spring.dependency-management") version "1.1.0"
     id("org.graalvm.buildtools.native") version "0.9.19"
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+//    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "com.everynote"
@@ -24,9 +22,8 @@ dependencies {
     implementation("com.amazonaws:aws-lambda-java-serialization:1.0.1")
     implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
     implementation("com.amazonaws:aws-lambda-java-core:1.2.2")
-    implementation("org.springframework.cloud:spring-cloud-starter-function-web")
-    implementation("org.springframework.cloud:spring-cloud-function-context")
-    implementation("org.springframework.cloud:spring-cloud-function-adapter-aws")
+    implementation("org.springframework.cloud:spring-cloud-starter-function-web:4.0.1")
+    implementation("org.springframework.cloud:spring-cloud-function-adapter-aws:4.0.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -43,28 +40,28 @@ graalvmNative {
     }
 }
 
-tasks.withType<ShadowJar> {
-    archiveClassifier.set("")
-    dependencies {
-        exclude("org.springframework.cloud:spring-cloud-function-web:$springCloudVersion")
-    }
+//tasks.withType<ShadowJar> {
+//    archiveClassifier.set("aws")
+//    dependencies {
+//        exclude("org.springframework.cloud:spring-cloud-function-web:4.0.1")
+//    }
+//
+//    mergeServiceFiles()
+//    append("META-INF/spring.handlers")
+//    append("META-INF/spring.schemas")
+//    append("META-INF/spring.tooling")
+//    transform(PropertiesFileTransformer::class.java) {
+//        paths = listOf("META-INF/spring.factories")
+//        mergeStrategy = "append"
+//    }
+//}
 
-    mergeServiceFiles()
-    append("META-INF/spring.handlers")
-    append("META-INF/spring.schemas")
-    append("META-INF/spring.tooling")
-    transform(PropertiesFileTransformer::class.java) {
-        paths = listOf("META-INF/spring.factories")
-        mergeStrategy = "append"
-    }
-}
-
-tasks.withType<Jar>() {
-    archiveClassifier.set("default")
-}
-
-tasks {
-    generateResourcesConfigFile {
-        dependsOn(shadowJar)
-    }
-}
+//tasks.withType<Jar>() {
+//    archiveClassifier.set("default")
+//}
+//
+//tasks {
+//    generateResourcesConfigFile {
+//        dependsOn(shadowJar)
+//    }
+//}
