@@ -2,7 +2,6 @@
 plugins {
     java
     id("org.springframework.boot") version "3.0.2"
-    id("io.spring.dependency-management") version "1.1.0"
     id("org.graalvm.buildtools.native") version "0.9.19"
 }
 
@@ -20,7 +19,7 @@ dependencies {
     implementation(platform("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"))
     implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
     implementation("com.amazonaws:aws-lambda-java-core:1.2.2")
-
+    implementation("com.amazonaws:aws-lambda-java-serialization:1.0.1")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
