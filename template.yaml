@@ -16,6 +16,15 @@ Globals:
 Resources:
   EveryNotePersisterFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Connectors:
+      NoteTableConnector:
+        Properties:
+          Destination:
+            Id: NoteTable
+          Permissions:
+            - Read
+            - Write
+
     Properties:
       CodeUri: .
       Handler: none
@@ -26,8 +35,17 @@ Resources:
             Queue: !GetAtt MainSqs.Arn
             BatchSize: 10
             Enabled: true
+    Metadata:
+      BuildMethod: makefile
+
   MainSqs:
     Type: AWS::SQS::Queue
 
-    Metadata:
-      BuildMethod: makefile
+  NoteTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: Note
+      PrimaryKey:
+        Name: id
+        Type: String
+

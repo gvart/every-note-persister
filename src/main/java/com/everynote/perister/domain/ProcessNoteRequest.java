@@ -2,7 +2,6 @@ package com.everynote.perister.domain;
 
 import com.everynote.perister.domain.gateway.ReadSqsMessageBody;
 import com.everynote.perister.domain.gateway.SaveNoteRequest;
-import com.everynote.perister.domain.model.PersistNoteRequest;
 
 public class ProcessNoteRequest {
 
