@@ -2,20 +2,40 @@ on:
   push:
     branches:
       - main
+
+permissions:
+  id-token: write
+  contents: read
 jobs:
-  job:
-    name: "Create artifact"
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/cache@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          python-version: "3.8"
+      - uses: aws-actions/setup-sam@v2
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: "build image if missing"
+        run: |
+          if [[ "$(docker images -q al2-graalvm:gradle 2> /dev/null)" == "" ]]; then
+            echo "Image not found. Building image."
+            ./build-image.sh
+          else
+            echo "Image found. Skipping build."
+          fi
 
+      - run: sam build --use-container
+      # Prevent prompts and failure when the stack is unchanged
+      - run: |
+          sam deploy \
+          --no-confirm-changeset \
+          --no-fail-on-empty-changeset \
+          --resolve-s3 \
+          --region ${{ secrets.AWS_REGION }} \
+          --capabilities CAPABILITY_IAM \
+          --stack-name every-note-persister

@@ -29,22 +29,24 @@ jobs:
       - name: "Gradle Test"
         run: ./gradlew test
 
-  create_native_binary:
-    name: "Create Native binary"
+  sam_build:
+    name: "Build using SAM"
     needs: build_and_test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
-      - name: "Build Native image"
-        run: |
-          mkdir lambda \
-          docker build -t native-lambda:1 . \
-          id=$(docker create --name tmp native-lambda:1) \
-          docker cp $id:/app/lambda.zip ./lambda/lambda.zip \
-          docker rm tmp
-
-      - uses: actions/upload-artifact@v3
+      - uses: actions/setup-python@v4
         with:
-          name: lambda_${{github.sha}}
-          path: ./lambda
+          python-version: "3.8"
+      - uses: aws-actions/setup-sam@v2
+
+      - name: "build image if missing"
+        run: |
+          if [[ "$(docker images -q al2-graalvm:gradle 2> /dev/null)" == "" ]]; then
+            echo "Image not found. Building image."
+            ./build-image.sh
+          else
+            echo "Image found. Skipping build."
+          fi
+
+      - run: sam build --use-container
