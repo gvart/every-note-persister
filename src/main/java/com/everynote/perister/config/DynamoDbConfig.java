@@ -43,6 +43,10 @@ public class DynamoDbConfig {
                         .getter(Note::getNoteBody)
                         .setter(Note::setNoteBody)
                 )
+                .addAttribute(Long.class, it -> it.name("created_at")
+                        .getter(Note::getCreatedAt)
+                        .setter(Note::setCreatedAt)
+                )
                 .build();
     }
 
