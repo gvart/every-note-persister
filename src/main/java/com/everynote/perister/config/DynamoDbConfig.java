@@ -39,6 +39,10 @@ public class DynamoDbConfig {
                         .setter(Note::setId)
                         .tags(primaryPartitionKey())
                 )
+                .addAttribute(String.class, it -> it.name("body")
+                        .getter(Note::getNoteBody)
+                        .setter(Note::setNoteBody)
+                )
                 .build();
     }
 
