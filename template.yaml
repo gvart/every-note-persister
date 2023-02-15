@@ -44,7 +44,7 @@ Resources:
   NoteTable:
     Type: AWS::Serverless::SimpleTable
     Properties:
-      TableName: Note
+      TableName: note
       PrimaryKey:
         Name: id
         Type: String
