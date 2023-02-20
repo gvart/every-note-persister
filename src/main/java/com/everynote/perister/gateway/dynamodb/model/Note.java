@@ -1,9 +1,6 @@
 package com.everynote.perister.gateway.dynamodb.model;
 
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
-import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
-@DynamoDbBean
 public class Note {
 
     private String id;
@@ -11,7 +8,6 @@ public class Note {
 
     private Long createdAt;
 
-    @DynamoDbPartitionKey
     public String getId() {
         return id;
     }

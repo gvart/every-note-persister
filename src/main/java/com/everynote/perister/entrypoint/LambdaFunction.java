@@ -22,14 +22,11 @@ public class LambdaFunction implements Consumer<SqsEvent> {
 
     @Override
     public void accept(SqsEvent sqsEvent) {
-        try {
-            log.info("{}", sqsEvent);
-            sqsEvent.records()
-                    .stream()
-                    .map(SqsMessage::body)
-                    .forEach(processNoteRequest::process);
-        } catch (Exception exception) {
-            log.error("Failed to process records", exception);
-        }
+        log.info("Received event: {}", sqsEvent);
+
+        sqsEvent.records()
+                .stream()
+                .map(SqsMessage::body)
+                .forEach(processNoteRequest::process);
     }
 }
