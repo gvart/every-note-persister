@@ -18,10 +18,12 @@ public class NoteRequestTransformer implements RequestTransformer<PersistNoteReq
 
         note.setNoteBody(input.body());
 
-        Optional.ofNullable(note.getId()).ifPresentOrElse(note::setId, () -> {
-            note.setId(generateId());
-            note.setCreatedAt(getCurrentTime());
-        });
+        Optional.ofNullable(note.getId()).ifPresentOrElse(
+                note::setId,
+                () -> {
+                    note.setId(generateId());
+                    note.setCreatedAt(getCurrentTime());
+                });
 
         return note;
     }

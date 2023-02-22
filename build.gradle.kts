@@ -25,6 +25,13 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-function-web")
     implementation("org.springframework.cloud:spring-cloud-function-adapter-aws")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.awaitility:awaitility")
+
+    testImplementation ("org.testcontainers:testcontainers:1.17.6")
+    testImplementation ("org.testcontainers:localstack:1.17.6")
+    testImplementation("com.amazonaws:aws-java-sdk-core:1.12.410") //Required by test-containers
+
+
 }
 
 tasks.withType<Test> {
