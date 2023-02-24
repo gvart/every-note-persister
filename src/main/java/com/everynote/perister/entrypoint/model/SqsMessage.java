@@ -1,4 +1,3 @@
 package com.everynote.perister.entrypoint.model;
 
-public record SqsMessage(String body) {
-}
+public record SqsMessage(String body) {}

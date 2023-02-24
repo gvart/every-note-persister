@@ -12,21 +12,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultSaveNoteRequest implements SaveNoteRequest {
 
-    private final Logger log = LoggerFactory.getLogger(DefaultSaveNoteRequest.class);
+  private final Logger log = LoggerFactory.getLogger(DefaultSaveNoteRequest.class);
 
-    private final DynamoDbTemplate template;
-    private final RequestTransformer<PersistNoteRequest, Note> transformer;
+  private final DynamoDbTemplate template;
+  private final RequestTransformer<PersistNoteRequest, Note> transformer;
 
-    public DefaultSaveNoteRequest(DynamoDbTemplate template, RequestTransformer<PersistNoteRequest, Note> transformer) {
-        this.template = template;
-        this.transformer = transformer;
-    }
+  public DefaultSaveNoteRequest(
+      DynamoDbTemplate template, RequestTransformer<PersistNoteRequest, Note> transformer) {
+    this.template = template;
+    this.transformer = transformer;
+  }
 
-    @Override
-    public void save(PersistNoteRequest request) {
-        log.info("Persisting {}", request);
+  @Override
+  public void save(PersistNoteRequest request) {
+    log.info("Persisting {}", request);
 
-        var dbEntry = transformer.transform(request);
-        template.save(dbEntry);
-    }
+    var dbEntry = transformer.transform(request);
+    template.save(dbEntry);
+  }
 }

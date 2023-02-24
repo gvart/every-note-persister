@@ -27,7 +27,7 @@ Resources:
 
     Properties:
       CodeUri: .
-      Handler: none
+      Handler: none #We don't need to define a handler because Custom Runtime uses an internal API to communicate with our application
       Events:
         SQSEvent:
           Type: SQS
@@ -36,7 +36,7 @@ Resources:
             BatchSize: 10
             Enabled: true
     Metadata:
-      BuildMethod: makefile
+      BuildMethod: makefile #Instruct SAM how to build application.
 
   MainSqs:
     Type: AWS::SQS::Queue

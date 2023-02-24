@@ -11,21 +11,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultReadSqsMessageBody implements ReadSqsMessageBody {
 
-    private final Logger log = LoggerFactory.getLogger(DefaultReadSqsMessageBody.class);
+  private final Logger log = LoggerFactory.getLogger(DefaultReadSqsMessageBody.class);
 
-    private final ObjectMapper mapper;
+  private final ObjectMapper mapper;
 
-    public DefaultReadSqsMessageBody(ObjectMapper mapper) {
-        this.mapper = mapper;
+  public DefaultReadSqsMessageBody(ObjectMapper mapper) {
+    this.mapper = mapper;
+  }
+
+  @Override
+  public PersistNoteRequest read(String body) {
+    try {
+      return mapper.readValue(body, PersistNoteRequest.class);
+    } catch (JsonProcessingException exception) {
+      log.error("Failed to read value: {}", body, exception);
+      throw new RuntimeException("Failed to process json.");
     }
-
-    @Override
-    public PersistNoteRequest read(String body) {
-        try {
-            return mapper.readValue(body, PersistNoteRequest.class);
-        } catch (JsonProcessingException exception) {
-            log.error("Failed to read value: {}", body, exception);
-            throw new RuntimeException("Failed to process json.");
-        }
-    }
+  }
 }

@@ -1,6 +1,7 @@
 spring:
   jackson:
     mapper:
-      accept-case-insensitive-properties: true
+      accept-case-insensitive-properties: true #This property is needed due to JSON messages sent by SQS (i.e. the $.Records filed starts with a capital letter)
     deserialization:
-      fail-on-unknown-properties: false
+      fail-on-unknown-properties: false #Ignore all unnecessary properties
+
